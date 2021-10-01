@@ -7,8 +7,11 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
+
   try {
-    const productData = await Product.findAll();
+    const productData = await Product.findAll({
+      include: [{ model: Category }, { model: Tag }]
+    });
     res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
@@ -21,8 +24,7 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const productData = await Product.findByPk(req.params.id, {
-      // JOIN with travellers, using the Trip through table
-      include: [{ model: Traveller, through: Trip, as: 'Product_travellers' }]
+      include: [{ model: Category }, { model: Tag }]
     });
 
     if (!productData) {
@@ -63,7 +65,6 @@ router.post('/', (req, res) => {
     })
     .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
-      console.log(err);
       res.status(400).json(err);
     });
 });

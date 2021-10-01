@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!cateogoriesData) {
-      res.status(404).json({ message: 'No product found with this id!' });
+      res.status(404).json({ message: 'No category found with this id!' });
       return;
     }
 
@@ -47,6 +47,24 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  // create a new tag
+  try {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).json({ message: "Please provide an id to update to" })
+    }
+
+    const updateData = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    })
+    res.status(200).json(updateData);
+
+
+  } catch (error) {
+    res.status(500).json(error);
+  }
+
 });
 
 router.delete('/:id', async (req, res) => {
@@ -59,7 +77,7 @@ router.delete('/:id', async (req, res) => {
     });
 
     if (!cateogoriesData) {
-      res.status(404).json({ message: 'No product found with this id!' });
+      res.status(404).json({ message: 'No category found with this id!' });
       return;
     }
 
