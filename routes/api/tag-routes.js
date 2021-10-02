@@ -44,8 +44,8 @@ router.post('/', async (req, res) => {
 
   try {
     const tagData = await Tag.create(req.body)
-
-    if (!tagData.tag_name) {
+    console.log(tagData)
+    if (!tagData) {
       res.status(404).json({ message: "must include a tag name" });
       return;
     }
